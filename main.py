@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException, status, APIRouter, Request
+from fastapi import FastAPI, HTTPException, status, Request
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, EmailStr
 from fastapi.exceptions import RequestValidationError
 from starlette import status
 from util.util import process_error
@@ -42,10 +41,9 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 		status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
 	)
 
-# Custom exception handler for HTTPException
 @app.exception_handler(HTTPException)
 async def custom_http_exception_handler(request: Request, exc: HTTPException):
     return JSONResponse(
         status_code=exc.status_code,
-        content=exc.detail,  # Replace 'detail' with 'message'
+        content=exc.detail,
     )
