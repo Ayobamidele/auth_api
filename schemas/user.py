@@ -8,7 +8,7 @@ class UserCreate(BaseModel):
 	lastName: str
 	email : EmailStr
 	password : str = Field(..., min_length=4)
-	phone: Optional[str] = None
+	phone: str
 
 
 class UserLogin(BaseModel):

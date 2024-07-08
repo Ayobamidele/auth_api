@@ -21,7 +21,9 @@ async def create_user(payload: UserCreate, db: Session = Depends(get_db)):
 	try:
 		user = create_new_user(payload.dict(), db=db)
 		token = create_access_token({'sub': user.email})
-		return {
+		return JSONResponse(
+			status_code=status.HTTP_201_CREATED,
+			content=jsonable_encoder({
 			"status": "success",
 			"message": "Registration successful",
 			"data": {
@@ -34,20 +36,21 @@ async def create_user(payload: UserCreate, db: Session = Depends(get_db)):
 					"phone": user.phone,
 				}
 			}
-		}
+		}),
+		)
 	except Exception as error:
 		if error.status_code == 422:
 			return JSONResponse(
-			status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-			content=jsonable_encoder({
-				"errors": [
-						{
-							"field": "email",
-							"message": "Email already exists."
-						}
-				]
-			}),
-		)
+				status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+				content=jsonable_encoder({
+					"errors": [
+							{
+								"field": "email",
+								"message": "Email already exists."
+							}
+					]
+				}),
+				)
 		elif error is RequestValidationError:
 			return JSONResponse(
 				jsonable_encoder({

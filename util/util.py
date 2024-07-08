@@ -22,7 +22,9 @@ error_message_templates = {
 				"string_too_short": "Password is too short"
 			},
 			"phone": {
-				"invalid": "Invalid Phone format. Please enter a valid Phone number."
+				"invalid": "Invalid Phone format. Please enter a valid Phone number.",
+				"missing": "Phone is missing. Please provide a valid Phone.",
+				"required": "Phone is required. Please provide a valid Phone.",
 			}
    }
 
