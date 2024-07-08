@@ -2,6 +2,7 @@ fastapi[all]
 uvicorn[standard]
 gunicorn
 python-dotenv
+psycopg2
 sqlalchemy
 alembic
 pydantic[email]
