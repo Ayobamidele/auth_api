@@ -4,9 +4,9 @@ from typing import Optional
 
 
 class UserCreate(BaseModel):
-	firstName: str
-	lastName: str
-	email : EmailStr
+	firstName: str = Field(..., min_length=1)
+	lastName: str = Field(..., min_length=1)
+	email : EmailStr = Field(..., min_length=4)
 	password : str = Field(..., min_length=4)
 	phone: str
 

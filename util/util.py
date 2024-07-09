@@ -30,6 +30,7 @@ error_message_templates = {
 
 def process_error(data):
 	result = data
+	print(data)
 	data = []
 	for i in result:
 		field = i['loc'][-1]
