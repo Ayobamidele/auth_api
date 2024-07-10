@@ -15,14 +15,14 @@ def test_register_with_default_organisation(client, db_session):
 	response = client.post("/auth/register",json=data)
 	assert response.status_code == 201
 	assert response.json()["status"] == "success"
-	user = response.json()['data']['user']
+	user = response.json()["data"]["user"]
 	assert get_organisation(f"{user['firstName']}'s Organisation", db=db_session).name == f"{user['firstName']}'s Organisation"
 	assert response.json()["data"]["user"]["email"] == "testuser@hng.com"
 	assert response.json()["data"]["user"]["firstName"] == "Mark"
 	assert response.json()["data"]["user"]["lastName"] == "Test"
 	assert response.json()["data"]["user"]["phone"] == "0913277789"
 	access_token = create_access_token(
-			data={"sub": response.json()["data"]["user"]["email"]}
+		data={"sub": response.json()["data"]["user"]["email"]}
 	)
 	assert response.json()["data"]["accessToken"] == access_token
  
@@ -37,9 +37,8 @@ def test_login(client, db_session):
 	}
 	response = client.post("/auth/register",json=data)
 	data = {
-		
 		"email":"testuser@hng.com",
-		"password":"testing123",
+		"password":"testing123"
 	}
 	response = client.post("/auth/login",json=data)
 	assert response.status_code == 200
@@ -51,7 +50,7 @@ def test_login(client, db_session):
 	assert response.json()["data"]["user"]["lastName"] == "Test"
 	assert response.json()["data"]["user"]["phone"] == "0913277789"
 	access_token = create_access_token(
-			data={"sub": response.json()["data"]["user"]["email"]}
+		data={"sub": response.json()["data"]["user"]["email"]}
 	)
 	assert response.json()["data"]["accessToken"] == access_token
  
@@ -67,7 +66,7 @@ def test_login(client, db_session):
 	data = {
 		
 		"email":"testuse1r@hng.com",
-		"password":"testing123",
+		"password":"testing123"
 	}
 	response = client.post("/auth/login",json=data)
 	assert response.status_code == 401

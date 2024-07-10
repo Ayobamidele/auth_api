@@ -35,15 +35,15 @@ def home():
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+def validation_exception_handler(request: Request, exc: RequestValidationError):
 	return JSONResponse(
-		jsonable_encoder(process_error(exc.errors())),
+		content=jsonable_encoder(process_error(exc.errors())),
 		status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
 	)
 
 @app.exception_handler(HTTPException)
-async def custom_http_exception_handler(request: Request, exc: HTTPException):
+def custom_http_exception_handler(request: Request, exc: HTTPException):
     return JSONResponse(
-        status_code=exc.status_code,
-        content=exc.detail,
+        status_code=422,
+        content=jsonable_encoder(process_error(exc.errors())),
     )

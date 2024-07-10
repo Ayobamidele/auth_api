@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
 from starlette import status
 from fastapi.encoders import jsonable_encoder
-from fastapi import HTTPException
 from schemas.user import UserCreate
 from db.models.user import User
 from db.models.organisation import Organisation 
@@ -25,17 +24,17 @@ def generate_unique_organization_id():
 def create_new_user(user:UserCreate,db:Session):
 	existing_email = db.query(User).filter_by(email=user['email']).first()
 	if existing_email:
-		raise HTTPException(
-			status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-			detail=jsonable_encoder({
-				"errors": [
-						{
-							"field": "email",
-							"message": "Email already exists."
-						}
-				]
-			}),
-		)
+		return JSONResponse(
+				status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+				content=jsonable_encoder({
+					"errors": [
+							{
+								"field": "email",
+								"message": "Email already exists."
+							}
+					]
+				}),
+			)
 	
 
 	user = User(

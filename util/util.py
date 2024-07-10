@@ -30,21 +30,23 @@ error_message_templates = {
 
 def process_error(data):
 	result = data
-	print(data)
 	data = []
-	for i in result:
-		field = i['loc'][-1]
-		error_type = i['type']
-		try:
-			data.append({
-				"field": field,
-				"message": error_message_templates[field].get(error_type, f"Invalid {field} field format.")
-			})
-		except KeyError:
-			data.append({
-				"fields": "format",
-				"message": "Invalid Request Format. Hint: missing fields."
-			})
-
-	return {"errors": data}
+	try:
+		for i in result:
+			field = i['loc'][-1]
+			error_type = i['type']
+			try:
+				data.append({
+					"field": field,
+					"message": error_message_templates[field].get(error_type, f"Invalid {field} field format.")
+				})
+			except KeyError:
+				data.append({
+					"fields": "format",
+					"message": "Invalid Request Format. Hint: missing fields."
+				})
+	except Exception as error:
+		print(error)
+	finally: 
+		return {"errors": data}
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, status
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from fastapi import APIRouter, status
@@ -17,7 +17,7 @@ router = APIRouter()
 
 
 @router.post('/register', status_code=status.HTTP_201_CREATED)
-async def create_user(payload: UserCreate, db: Session = Depends(get_db)):
+def create_user(payload: UserCreate, db: Session = Depends(get_db)):
 	try:
 		user = create_new_user(payload.dict(), db=db)
 		token = create_access_token({'sub': user.email})
@@ -33,11 +33,10 @@ async def create_user(payload: UserCreate, db: Session = Depends(get_db)):
 					"firstName": user.firstName,
 					"lastName": user.lastName,
 					"email": user.email,
-					"phone": user.phone,
+					"phone": user.phone
 				}
 			}
-		}),
-		)
+		}))
 	except Exception as error:
 		if error.status_code == 422:
 			return JSONResponse(
@@ -53,7 +52,7 @@ async def create_user(payload: UserCreate, db: Session = Depends(get_db)):
 				)
 		elif error is RequestValidationError:
 			return JSONResponse(
-				jsonable_encoder({
+				content=jsonable_encoder({
 					"errors": process_error(error.json())
 				}),
 				status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
